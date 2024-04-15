@@ -24,8 +24,11 @@ DEALINGS IN THE SOFTWARE.
 '''
 
 import os
+import itertools
 
-N_ROUNDS = 5
+from pwn import *
+
+N_ROUNDS = 4
 
 def expand_key(master_key):
     """
@@ -42,9 +45,11 @@ def expand_key(master_key):
 
     # Initialize round keys with raw key material.
     key_columns = [list(master_key[4*i:4*i+4]) for i in range(16)]
+    #print(key_columns)
 
     iteration_size = len(master_key) // 4
 
+    # Each iteration has exactly as many columns as the key material.
     i = 1
     while len(key_columns) < (N_ROUNDS + 1) * 16:
         # Copy previous word.
@@ -90,6 +95,8 @@ def add_round_key(s, rk):
 
     return new_state
 
+
+
 s_box = [
     0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5, 0x30, 0x01, 0x67, 0x2B, 0xFE, 0xD7, 0xAB, 0x76,
     0xCA, 0x82, 0xC9, 0x7D, 0xFA, 0x59, 0x47, 0xF0, 0xAD, 0xD4, 0xA2, 0xAF, 0x9C, 0xA4, 0x72, 0xC0,
@@ -122,7 +129,6 @@ def sub_bytes(s):
     return new_state
 
 
-# provided for convenience
 def inv_sub_bytes(s):
     new_state = [[[0 for _ in range(4)] for _ in range(4)] for _ in range(4)]
 
@@ -141,7 +147,6 @@ def shift_planes(s):
                 new_state[(i+j) % 4][(j+k) % 4][k] = s[i][j][k]
     return new_state
 
-# provided for convenience
 def inv_shift_planes(s):
     new_state = [[[0 for _ in range(4)] for _ in range(4)] for _ in range(4)]
     for i in range(4):
@@ -173,7 +178,7 @@ def mix_columns(s):
             new_state[i][j] = mix_single_column(s[i][j])
     return new_state
 
-# provided for convenience
+
 def inv_mix_columns(s):
     new_state = [[[0 for _ in range(4)] for _ in range(4)] for _ in range(4)]
 
@@ -190,8 +195,6 @@ def inv_mix_columns(s):
     return mix_columns(new_state)
 
 def encrypt(key, plaintext):
-    assert(len(key) == 64)
-    assert(len(plaintext) == 64)
     round_keys = expand_key(key)
 
     state = bytes_to_state(plaintext)
@@ -208,31 +211,189 @@ def encrypt(key, plaintext):
     state = sub_bytes(state)
     state = shift_planes(state)
     state = add_round_key(state, round_keys[N_ROUNDS])
+    #print(state)
+
+    return state_to_bytes(state)
+
+def decrypt(key, ciphertext):
+    round_keys = expand_key(key)
+
+    state = bytes_to_state(ciphertext)
+
+    state = add_round_key(state, round_keys[N_ROUNDS])
+
+    for i in range(N_ROUNDS-1, 0, -1):
+        state = inv_shift_planes(state)
+        state = inv_sub_bytes(state)
+        state = add_round_key(state, round_keys[i])
+        state = inv_mix_columns(state)
+
+
+    state = inv_shift_planes(state)
+    state = inv_sub_bytes(state)
+    state = add_round_key(state, round_keys[0])
 
     return state_to_bytes(state)
 
 
 
+
+def inv_expand_key(rk, round):
+    r_con = (
+        0x00, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40,
+        0x80, 0x1B, 0x36, 0x6C, 0xD8, 0xAB, 0x4D, 0x9A,
+        0x2F, 0x5E, 0xBC, 0x63, 0xC6, 0x97, 0x35, 0x6A,
+        0xD4, 0xB3, 0x7D, 0xFA, 0xEF, 0xC5, 0x91, 0x39,
+    )
+
+    cur_round_key = rk
+
+    rounds_left = round
+    while rounds_left > 0:
+        # undo round
+        # calculate the easy columns
+        prev_round_key = [0] * 64
+        
+        for i in range(15, 0, -1):
+            prev_round_key[i*4:(i+1)*4] = xor_add(cur_round_key[i*4:(i+1)*4], cur_round_key[(i-1)*4:i*4])
+
+        word = prev_round_key[-4:]
+        # shift
+        word = word[1:] + [word[0]]
+        # Map to S-BOX.
+        word = [s_box[b] for b in word]
+        # XOR with first byte of R-CON, since the others bytes of R-CON are 0.
+        word[0] ^= r_con[rounds_left]
+
+        prev_round_key[0:4] = xor_add(cur_round_key[0:4], word)
+
+        cur_round_key = prev_round_key
+
+        rounds_left -= 1
+    return cur_round_key
+
+
+
+def build_ddt():
+    ddt = [[[] for _ in range(256)] for _ in range(256)]
+
+    for i in range(256):
+        for j in range(256):
+            ddt[i^j][s_box[i]^s_box[j]].append((i,j))
+    return ddt
+
+
+
+def gen_possible_column_diffs(col_number):
+    cols = []
+
+    for i in range(256):
+        col = [0]*4
+        col[col_number] = i
+        col = mix_single_column(col)
+        cols.append(col)
+
+    #print(cols)
+    return cols
+
+
+def get_sbox_output_diff(ct0, ct1):
+    state0 = bytes_to_state(ct0)
+    state1 = bytes_to_state(ct1)
+
+    diff = [ [ [ a ^ b for a, b in zip(aa, bb)] for aa, bb in zip(aaa,bbb)] for aaa,bbb in zip(state0,state1)]
+
+    diff = inv_shift_planes(diff)
+    return diff
+
+def xor_add(b1, b2):
+    return [x ^ y for x,y in zip(b1, b2)]
+
+
 if __name__ == "__main__":
-    key = os.urandom(64)
+    io = process(["python", "./mega_aes_2.py"])
 
-    flag = b'UMDCTF{THIS IS A TEST FLAG CHANGE THIS AT SOME POINT}'
-    flag += b'\x00' * (64 - len(flag))
+    io.recvuntil(b"Flag: ")
+    flag = bytes.fromhex(io.recvline(keepends=False).decode())
 
-    print("Flag: ", bytes.hex(encrypt(key, flag)))
+    pts = []
+    cts = []
+    # 3 chosen plaintexts
+    for i in range(3):
+        pts.append(bytes([1 << i] + [0]*63))
 
-    print("Enter your plaintext: ")
-    pt = bytes.fromhex(input())
-    if len(pt) % 64 != 0:
-        print("Must be a multiple of block size!")
-        exit()
-    elif (len(pt) // 64) >= 512:
-        print("Ciphertext is too long!")
-        exit()
-    i = 0 
-    while i < len(pt):
-        print(bytes.hex(encrypt(key, pt[i:i+64])), end='')
-        i += 64
-    
-    print()
-    print("Goodbye!")
+    full_pt = b''.join(pts)
+    print(full_pt)
+
+    io.sendlineafter(b"plaintext: \n", bytes.hex(full_pt).encode())
+    response = io.recvline(keepends=False)
+    response = bytes.fromhex(response.decode()) 
+
+    cts = [response[i:i+64] for i in range(0, 3*64, 64)]
+
+    ddt = build_ddt()
+
+    shifted_planes_permutation = bytes_to_state(list(range(64)))
+    shifted_planes_permutation = shift_planes(shifted_planes_permutation)
+    shifted_rows_permutation = sum(sum(shifted_planes_permutation, []), [])
+    print(shifted_rows_permutation)
+
+    # figure out which byte of each column is active. there's a formula for this but this is easier for me
+    permuted_col_indices = [1] + [0]*63
+    permuted_col_indices = bytes_to_state(permuted_col_indices)
+    permuted_col_indices = mix_columns(permuted_col_indices)
+    permuted_col_indices = shift_planes(permuted_col_indices)
+    permuted_col_indices = mix_columns(permuted_col_indices)
+    permuted_col_indices = shift_planes(permuted_col_indices)
+
+    active_byte_indices = []
+    for i in range(4):
+        for j in range(4):
+            for k in range(4):
+                if permuted_col_indices[i][j][k] != 0:
+                    active_byte_indices.append(k)
+                    break
+    print(active_byte_indices)
+
+
+
+    round_key = []
+    for col_index in range(16):
+        active_byte_index = active_byte_indices[col_index]
+        col_diffs = gen_possible_column_diffs(active_byte_index)
+        col_rk_set = None
+        for i, j in itertools.combinations(list(range(3)), 2):
+            #input_pt_diff = [a ^ b for a, b in zip(pts[i], pts[j])]
+            inv_ct_diff = get_sbox_output_diff(cts[i], cts[j])
+            ct_state_i = bytes_to_state(cts[i])
+            ct_state_j = bytes_to_state(cts[j])
+
+            ct_state_i = inv_shift_planes(ct_state_i)
+            ct_state_j = inv_shift_planes(ct_state_j)
+
+            output_column = inv_ct_diff[col_index // 4][col_index % 4]
+
+            col_round_keys = []
+            for input_column in col_diffs:
+                round_key_guesses = [[] for _ in range(4)]
+                for l in range(4):
+                    b_in, b_out = input_column[l], output_column[l]
+                    for s_box_input_i, s_box_input_j in ddt[b_in][b_out]:
+                        round_key_byte = s_box[s_box_input_i] ^ ct_state_i[col_index // 4][col_index % 4][l]
+                        assert round_key_byte == s_box[s_box_input_j] ^ ct_state_j[col_index // 4][col_index % 4][l] # sanity check
+                        round_key_guesses[l].append(round_key_byte)
+
+                for rk in itertools.product(*round_key_guesses):
+                    col_round_keys.append(rk)
+            if col_rk_set is None:
+                col_rk_set = set(col_round_keys)
+            else:
+                col_rk_set = col_rk_set.intersection(col_round_keys)
+        if col_rk_set is None:
+            raise Exception
+        else:
+            round_key.append(list(list(col_rk_set)[0]))
+    round_key = sum(round_key, [])
+    round_key = sum(sum(shift_planes(bytes_to_state(round_key)), []), [])
+
+    print(decrypt(inv_expand_key(round_key, 4), flag))

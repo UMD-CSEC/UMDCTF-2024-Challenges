@@ -286,7 +286,7 @@ if __name__ == "__main__":
     for pt in lambda_set:
         full_pt += bytes(pt)
 
-    lambda_set2 = [[i] + [1] * 63 for i in range(256)]
+    lambda_set2 = [[0, i] + [0] * 62 for i in range(1, 256)]
     for pt in lambda_set2:
         full_pt += bytes(pt)
 
@@ -297,8 +297,10 @@ if __name__ == "__main__":
 
     response = bytes.fromhex(response.decode()) 
 
+    lambda_set2 = [[0]*64] + lambda_set2
+
     lambda_ct_set = [list(response[i:i+64]) for i in range(0, 256*64, 64)]
-    lambda_ct_set2 = [list(response[i:i+64]) for i in range(256*64, 512*64, 64)]
+    lambda_ct_set2 = [list(response[0:64])] + [list(response[i:i+64]) for i in range(256*64, 511*64, 64)]
 
 
     key_guesses = [[] for _ in range(64)]

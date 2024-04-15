@@ -25,7 +25,7 @@ DEALINGS IN THE SOFTWARE.
 
 import os
 
-N_ROUNDS = 5
+N_ROUNDS = 4 # NOTE THAT THIS IS DIFFERENT FROM THE OTHER CHALLENGE
 
 def expand_key(master_key):
     """
@@ -226,7 +226,7 @@ if __name__ == "__main__":
     if len(pt) % 64 != 0:
         print("Must be a multiple of block size!")
         exit()
-    elif (len(pt) // 64) >= 512:
+    elif (len(pt) // 64) > 3:
         print("Ciphertext is too long!")
         exit()
     i = 0 
