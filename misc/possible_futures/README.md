@@ -14,8 +14,9 @@ Run `builder.py` in Python 3.12 with `flag.txt` in the same directory.
 
 ## Files for CTFd
 
--`root.7z`
--`builder.py`
+  +`root.7z`
+
+  +`builder.py`
 
 ## Flag
 
