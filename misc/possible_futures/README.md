@@ -8,6 +8,10 @@
 
 *But I do see a way.*
 
+### Hints
+
+Hint 1 (free): The password to each `.7z` file is the MD5 Hash of the name where such `.7z` file is contained.
+
 ## Build Instructions
 
 Run `builder.py` in Python 3.12 with `flag.txt` in the same directory.
