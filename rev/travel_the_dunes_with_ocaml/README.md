@@ -96,7 +96,7 @@ Now switch to the disassembly. When the flag checker outputs `Checking: <char>` 
 We now have our flag!
 
 
-**P.S:** You could've also probably datamined or brute-forced the flag.
+**P.S:** You could've also datamined or brute-forced the flag.
 
 
 
