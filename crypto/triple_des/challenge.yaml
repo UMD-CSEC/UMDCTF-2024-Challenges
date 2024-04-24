@@ -1,0 +1,18 @@
+name: Triple DES
+author: clam
+description: Before the Kwisatz Haderach, the Bene Gesserit used this oracle to predict the future.
+provide:
+  - ./tripledes.py
+containers:
+  main:
+    build: .
+    ports:
+      - 5000
+    replicas: 1
+    securityContext:
+      privileged: true
+expose:
+  main:
+    - target: 5000
+      tcp: 33333
+      healthContent: "DES, three times"

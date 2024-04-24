@@ -1,8 +1,8 @@
 # Triple DES
-i'll think of a description later
+Before the Kwisatz Haderach, the Bene Gesserit used this oracle to predict the future.
 
 ## Build Instructions
-needs dockerfile
+Run `tripledes.py` with `key.txt` and `flag.txt` in the same directory.
 
 ## Files for CTFd
 - `tripledes.py` 
