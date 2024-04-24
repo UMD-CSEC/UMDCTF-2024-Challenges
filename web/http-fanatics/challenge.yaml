@@ -1,0 +1,6 @@
+name: HTTP Fanatics
+author: tahmid-23
+description: The official HTTP Fanatics webpage has upgraded their server infrastructure to HTTP/3. I still don't know how to sign up...
+provide:
+  - ./app/main.py
+  - ./reverse-proxy/src/main.rs

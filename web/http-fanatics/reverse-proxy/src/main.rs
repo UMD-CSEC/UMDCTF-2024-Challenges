@@ -88,7 +88,7 @@ async fn handle_h2_connection(stream: TcpStream, tls_acceptor: &TlsAcceptor) -> 
 
 async fn handle_h2_request(_: Request<Incoming>) -> Result<Response<Full<Bytes>>, Error> {
     let response = Response::builder()
-        .header(http::header::ALT_SVC, "h3=\":8443\"")
+        .header(http::header::ALT_SVC, "h3=\":443\"")
         .status(StatusCode::OK)
         .body(Full::new(Bytes::from("Please use HTTP/3. \
         I put so much effort into upgrading ALL the server infrastructure use HTTP/3. I hope it didn't add any bugs!\n\
