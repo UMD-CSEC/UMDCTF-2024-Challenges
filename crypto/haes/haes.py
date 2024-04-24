@@ -1,3 +1,5 @@
+#!/usr/local/bin/python
+
 # adapted from https://github.com/boppreh/aes/blob/master/aes.py, 
 # which is in turn adapted from https://github.com/bozhu/AES-Python
 # LICENSE:

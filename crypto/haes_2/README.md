@@ -5,9 +5,8 @@ The Baron got tired of hearing all of these annoying nonsense messages from the 
 From now on, your messages will be short and understandable.
 
 ## Build Instructions
-TODO - need to figure out how to set up Dockerfile
 
-## Files for CTFd
+## Files for rCTF
 `haes_2.py`
 
 ## Flag

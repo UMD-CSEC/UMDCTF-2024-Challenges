@@ -5,7 +5,6 @@
 Much like the Baron himself, Harkonnen encryption systems are quite... large.
 
 ## Build Instructions
-TODO - need to figure out how to set up Dockerfile
 
 ## Files for CTFd
 `haes.py`

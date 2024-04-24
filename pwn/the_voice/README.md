@@ -1,7 +1,6 @@
 # The Voice
 
 ## Build Instructions
-TODO - need to figure out how to set up Dockerfile
 
 ## Files for CTFd
 - `the_voice`
