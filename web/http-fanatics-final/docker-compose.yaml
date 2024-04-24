@@ -1,0 +1,8 @@
+services:
+  app:
+    build: "./app"
+  reverse-proxy:
+    build: "./reverse-proxy"
+    ports:
+      - "8443:443/tcp"
+      - "8443:443/udp"
