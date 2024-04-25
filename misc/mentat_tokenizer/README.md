@@ -1,4 +1,4 @@
-# mentat_tokenizer
+# mentat tokenizer
 
 ever wondered how mentats reason about words? i am going to claim that they use tokenizers like llms (please don't hate me frank herbert). anyway baron harkonnen gave the flag to his mentat piter de vries, but little did he know dr. yueh installed a backdoor in piter's brain. dr. yueh gave us the tokens, but we need the flag!
 
