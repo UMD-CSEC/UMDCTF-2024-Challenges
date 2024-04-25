@@ -12,7 +12,6 @@ get data and train the model, training code in `attack_of_the_worm`
 
 - `model.pt`
 - `server.py`
-- `worm.png`
 
 ## Flag
 

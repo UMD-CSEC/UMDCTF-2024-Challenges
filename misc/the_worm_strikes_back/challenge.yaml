@@ -8,7 +8,6 @@ flag: UMDCTF{sandworms_love_adversarial_patches}
 provide:
   - ./model.pt
   - ./server.py
-  - ./worm.png
 containers:
   main:
     build: .
