@@ -14,9 +14,6 @@ using car_t = typename T::car;
 template <class T>
 using cdr_t = typename T::cdr;
 
-template <class T, class U>
-struct concat;
-
 template <class ... Ts>
 struct list;
 
