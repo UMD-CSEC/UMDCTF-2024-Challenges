@@ -4,7 +4,7 @@ the fremen are trying to sabotage the spice harvest and they need your help! spi
 
 ## Build Instructions
 
-`./start_docker.sh`
+get data and train the model
 
 ## Files for CTFd
 
