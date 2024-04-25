@@ -50,8 +50,8 @@ async fn main() {
         })
         .layer(SessionManagerLayer::new(MemoryStore::default()));
 
-    let listener = TcpListener::bind("0.0.0.0:8080").await
-        .expect("Failed to bind to 0.0.0.0:8080");
+    let listener = TcpListener::bind("0.0.0.0:80").await
+        .expect("Failed to bind to 0.0.0.0:80");
     axum::serve(listener, app.into_make_service()).await.expect("Failed to serve HTTP server");
 }
 
@@ -337,8 +337,8 @@ async fn connect_via_stream<T>(stream: T, tls_connector: &TlsConnector, users: &
     let (mut proxy_sender, proxy_connection) = hyper::client::conn::http1::handshake(TokioIo::new(stream)).await?;
     tokio::spawn(proxy_connection.with_upgrades());
 
-    let connect_request = Request::connect("bob.localhost.direct:8443")
-        .header(hyper::header::HOST, "bob.localhost.direct:8443")
+    let connect_request = Request::connect("umdproxy.umdctf.io:443")
+        .header(hyper::header::HOST, "umdproxy.umdctf.io:443")
         .body(Empty::<Bytes>::new())
         .unwrap();
     let connect_response = proxy_sender.send_request(connect_request).await?;
@@ -347,7 +347,7 @@ async fn connect_via_stream<T>(stream: T, tls_connector: &TlsConnector, users: &
     }
 
     let upgraded = hyper::upgrade::on(connect_response).await?;
-    let tls_stream = tls_connector.connect(ServerName::try_from("bob.localhost.direct").unwrap(), TokioIo::new(upgraded)).await?;
+    let tls_stream = tls_connector.connect(ServerName::try_from("umdproxy.umdctf.io").unwrap(), TokioIo::new(upgraded)).await?;
 
     let (mut sender, connection) = hyper::client::conn::http1::handshake(TokioIo::new(tls_stream))
         .await?;
@@ -359,7 +359,7 @@ async fn connect_via_stream<T>(stream: T, tls_connector: &TlsConnector, users: &
     }))?;
 
     let add_credits_request = Request::post("/api/add-credits")
-        .header(hyper::header::HOST, "bob.localhost.direct:8443")
+        .header(hyper::header::HOST, "umdproxy.umdctf.io:443")
         .header(hyper::header::AUTHORIZATION, SERVER_SECRET)
         .header(hyper::header::CONTENT_TYPE, "application/json")
         .body(Full::<Bytes>::new(Bytes::from(body)))?;
