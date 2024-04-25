@@ -1,4 +1,3 @@
-from adv_lib.attacks import sigma_zero
 import torch
 from torch import Tensor, nn
 from torch.autograd import grad
@@ -6,10 +5,11 @@ import torchvision
 from PIL import Image
 import math
 
+# https://github.com/jeromerony/adversarial-library/blob/main/adv_lib/attacks/sigma_zero.py
 def sigma_zero(model: nn.Module,
                inputs: Tensor,
                labels: Tensor,
-               num_steps: int = 3000,
+               num_steps: int = 25000,
                n0: float = 1.0,
                s: float = 0.001,
                t0: float = 0.3,
@@ -26,8 +26,10 @@ def sigma_zero(model: nn.Module,
     b1, b2 = 0.9, 0.999
 
     best_l0 = inputs.new_full((batch_size,), numel)
+    real_best_l0 = 1000
     best_adv = inputs.clone()
     t = torch.full_like(best_l0, t0)
+    int_inputs = (inputs * 255).int()
 
     n = n0
     for i in range(num_steps):
@@ -41,13 +43,12 @@ def sigma_zero(model: nn.Module,
 
         # keep best solutions
         predicted_classes = (logits > 0).float().squeeze()
-        l0_norm = d.data.flatten(1).norm(p=0, dim=1)
 
         is_adv = predicted_classes != labels
-        is_smaller = l0_norm < best_l0
-        is_both = is_adv & is_smaller
-        best_l0 = torch.where(is_both, l0_norm, best_l0)
-        best_adv = torch.where(batch_view(is_both), adv_inputs.detach(), best_adv)
+        new_l0 = torch.count_nonzero((adv_inputs * 255).int() - int_inputs)
+        if is_adv and new_l0 < real_best_l0:
+            real_best_l0 = new_l0
+            best_adv = adv_inputs.detach()
 
         # compute loss and gradient
         adv_loss = (-dl_loss + l0_approx_normalized).sum()
@@ -84,8 +85,6 @@ model.load_state_dict(torch.load("model.pt"))
 
 worm = Image.open("worm.png")
 worm = torchvision.transforms.ToTensor()(worm).unsqueeze(0)
-
-y = model(worm)
 
 out = sigma_zero(model, worm, torch.tensor([1], dtype=torch.float32))
 

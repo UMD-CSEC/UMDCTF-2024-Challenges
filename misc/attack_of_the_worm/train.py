@@ -56,6 +56,8 @@ dataset_size = len(image_dataset)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 model = torchvision.models.resnet18(weights="IMAGENET1K_V1")
+for param in model.parameters():
+    param.requires_grad = False
 model.fc = nn.Linear(model.fc.in_features, 1)
 
 model = model.to(device)
@@ -65,5 +67,6 @@ criterion = nn.BCEWithLogitsLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=0.001)
 scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.5)
 
+model.load_state_dict(torch.load("model.pt"))
 model = train_model(model, criterion, optimizer, scheduler, num_epochs=50)
 torch.save(model.state_dict(), "model.pt")
