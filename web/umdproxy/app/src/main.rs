@@ -185,11 +185,11 @@ const FLAG: &'static str = "UMDCTF{YoU_w1lL_n3Ver_rEaCh_7H3_tRuTh}";
 async fn flag(extract::State(state): extract::State<AppState>, session: Session) -> Response {
     acquire_user_mut_from_session(state, session, |account| {
         if account.has_flag {
-            return (StatusCode::OK, FLAG).into_response()
+            return (StatusCode::OK, FLAG).into_response();
         }
 
         if account.credits < 10_000 {
-            return (StatusCode::BAD_REQUEST, "you're too poor").into_response()
+            return (StatusCode::BAD_REQUEST, "you're too poor").into_response();
         }
 
         account.credits -= 10_000;
@@ -273,11 +273,12 @@ async fn redeem_proxy(extract::State(state): extract::State<AppState>, session: 
                 account.proxy_redeem_result = None;
 
                 let username = account.username.clone();
+                let original_credits = account.credits;
                 tokio::spawn(async move {
                     let mut success = false;
                     let tls_connector = create_tls_connector();
                     for _ in 0..5 {
-                        let result = tokio::time::timeout(Duration::from_secs(15), try_proxy(&username, proxy_host.clone(), proxy_port, is_https, &tls_connector)).await;
+                        let result = tokio::time::timeout(Duration::from_secs(5), try_proxy(proxy_host.clone(), proxy_port, is_https, &tls_connector, &users, &username, original_credits)).await;
                         if let Ok(Ok(_)) = result {
                             success = true;
                             break;
@@ -317,21 +318,21 @@ fn create_tls_connector() -> TlsConnector {
     TlsConnector::from(Arc::new(rustls_config)).early_data(true)
 }
 
-async fn try_proxy(user: &str, proxy_host: String, proxy_port: u16, is_https: bool, tls_connector: &TlsConnector) -> Result<(), anyhow::Error> {
+async fn try_proxy(proxy_host: String, proxy_port: u16, is_https: bool, tls_connector: &TlsConnector, users: &Mutex<HashMap<String, Account>>, user: &str, original_credits: i32) -> Result<(), anyhow::Error> {
     let tcp_stream = TcpStream::connect(format!("{}:{}", proxy_host, proxy_port)).await?;
     tcp_stream.set_nodelay(true)?;
 
     if is_https {
         let tls_stream = tls_connector.connect(ServerName::try_from(proxy_host)?, tcp_stream).await?;
-        return Ok(connect_via_stream(tls_stream, user, tls_connector).await?);
+        return Ok(connect_via_stream(tls_stream, tls_connector, users, user, original_credits).await?);
     }
 
-    Ok(connect_via_stream(tcp_stream, user, tls_connector).await?)
+    Ok(connect_via_stream(tcp_stream, tls_connector, users, user, original_credits).await?)
 }
 
 const SERVER_SECRET: &'static str = "noBOdY w!1L 9U3$S 7Hi$ s3Cr37 u317rsf79dfsd9f";
 
-async fn connect_via_stream<T>(stream: T, user: &str, tls_connector: &TlsConnector) -> Result<(), anyhow::Error>
+async fn connect_via_stream<T>(stream: T, tls_connector: &TlsConnector, users: &Mutex<HashMap<String, Account>>, username: &str, original_credits: i32) -> Result<(), anyhow::Error>
     where T: AsyncRead + AsyncWrite + Unpin + Send + 'static {
     let (mut proxy_sender, proxy_connection) = hyper::client::conn::http1::handshake(TokioIo::new(stream)).await?;
     tokio::spawn(proxy_connection.with_upgrades());
@@ -353,8 +354,8 @@ async fn connect_via_stream<T>(stream: T, user: &str, tls_connector: &TlsConnect
     tokio::spawn(connection);
 
     let body = serde_json::to_vec(&json!({
-        "username": user,
-        "credits": 1000
+        "username": username,
+        "credits": 2000
     }))?;
 
     let add_credits_request = Request::post("/api/add-credits")
@@ -363,8 +364,14 @@ async fn connect_via_stream<T>(stream: T, user: &str, tls_connector: &TlsConnect
         .header(hyper::header::CONTENT_TYPE, "application/json")
         .body(Full::<Bytes>::new(Bytes::from(body)))?;
 
-    tokio::time::sleep(Duration::from_secs(2)).await;
     let _ = sender.send_request(add_credits_request).await;
+
+    let users = users.lock().await;
+    if let Some(account) = users.get(username) {
+        if account.credits <= original_credits {
+            return Err(anyhow!("Failed to add credits"));
+        }
+    }
 
     Ok(())
 }
