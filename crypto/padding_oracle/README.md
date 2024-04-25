@@ -1,11 +1,14 @@
 # Padding Oracle
 
+## Description
+The Baron used AES128-CBC with PKCS#7 to hide the flag. Can you recover the flag using his padding oracle?
+
 ## Build Instructions
-Need to create a service that takes unlimited user (hex) input ciphertexts `ct` and outputs `check_ct(ct)`.
+Use docker with `dockerfile` to run the padding oracle. Use netcat to interact with padding oracle.
 
 ## Files for CTFd
-- `padding_oracle.py` 
+- `iv.txt` 
+- `flag.txt`
 
 ## Flag
-
 `umdctf{I_l0vE_p@dINg_0rAClE_@tTacKS}`
