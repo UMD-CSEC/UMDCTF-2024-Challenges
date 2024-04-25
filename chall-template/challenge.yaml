@@ -1,0 +1,46 @@
+# KEEP THIS FILE IN THE ROOT OF YOUR CHALLENGE DIRECTORY IN THE GIT
+name: challenge_name
+author: author
+
+description: |-
+  Here is an example description
+
+  Look at this cool template and markdown with netcat deets:
+
+  `{{ nc }}`
+
+flag: flag{test_flag}
+
+# remove this if your challenge has no distributed files
+# these files are taken from the same directory as the challenge.yaml
+provide:
+  - file.txt
+  - file2.txt
+
+# remove this if your challenge has no online component
+# this default config will build the container using the
+# Dockerfile in the current directory
+#
+# also: see example Dockerfile in chall-template
+# feel free to replace with your own, but if making a simple challenge
+# w/ nc connetion it's a good start
+containers:
+  main:
+    build: .
+    ports:
+      - YOUR_CONTAINER_PORT_HERE
+
+# remove this if your challenge has no online component
+# use either tcp/http
+# this uses container name from above
+expose: 
+  main:
+    - target: YOUR_CONTAINER_PORT_HERE
+      tcp: COMPETITOR_PORT_HERE
+
+# set these to true when your challenge is ready
+# if you want to test your challenge, set deployed: true only, but
+# be fast since your challenge is technically accessible by others
+# if they guess url/port
+visible: false
+deployed: false
