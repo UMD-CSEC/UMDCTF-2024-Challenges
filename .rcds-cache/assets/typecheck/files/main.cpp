@@ -1,1 +1,0 @@
-/home/triacontakai/ctf/umdctf2024/UMDCTF-2024-Challenges/rev/typecheck/main.cpp
