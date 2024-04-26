@@ -5,7 +5,7 @@ flag: umdctf{why_did_you_spend_your_time_doing_this}
 containers:
   main:
     build: .
-    ports: 5000
+    ports: [5000]
 expose:
   main:
     - target: 5000
