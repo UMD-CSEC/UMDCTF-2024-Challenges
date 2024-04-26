@@ -1,6 +1,6 @@
 name: ready_aim_fire
 author: aparker
-deployed: false
+deployed: true
 description: |-
   Firing your weapon when the spice harvester's shields are down requires exceptional timing.
 

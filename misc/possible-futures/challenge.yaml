@@ -11,7 +11,7 @@ description: |
   
 flag: UMDCTF{th3_w@t3R_0F_l1fE_lE@ds_yOu_t0_v1cT0RY}
 
-deployed: false
+deployed: true
 
 provide:
   - ./root.7z

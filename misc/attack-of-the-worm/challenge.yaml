@@ -8,7 +8,7 @@ description: |
   `{{ nc }}`
 flag: UMDCTF{spice_harvester_destroyed_sunglasses_emoji}
 
-deployed: false
+deployed: true
 
 provide:
   - ./model.pt

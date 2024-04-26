@@ -1,6 +1,6 @@
 name: haes 
 author: aparker
-deployed: false
+deployed: true
 description: |-
   Much like the Baron himself, Harkonnen encryption systems are quite... large.
 

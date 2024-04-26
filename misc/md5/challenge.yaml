@@ -13,4 +13,4 @@ expose:
   main:
     - target: 5000
       http: md5
-deployed: false
+deployed: true

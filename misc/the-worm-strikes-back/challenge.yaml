@@ -8,7 +8,7 @@ description: |
   `{{ nc }}`
 flag: UMDCTF{sandworms_love_adversarial_patches}
 
-deployed: false
+deployed: true
 
 provide:
   - ./model.pt

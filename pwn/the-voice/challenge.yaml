@@ -1,6 +1,6 @@
 name: the_voice
 author: aparker
-deployed: false
+deployed: true
 description: |-
   If you want the flag, command me to give it to you.
 
