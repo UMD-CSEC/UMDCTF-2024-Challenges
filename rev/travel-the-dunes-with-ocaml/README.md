@@ -4,9 +4,7 @@
 
 ### Hints
 
-Hint 1 (free): Don't use Ghidra on this file. Binary Ninja is free and provides a pretty good decompilation to C.
-
-Hint 2 (free): The flag is `123` characters in length.
+Hint 1: The flag is `123` characters in length.
 
 ## Build Instructions
 
