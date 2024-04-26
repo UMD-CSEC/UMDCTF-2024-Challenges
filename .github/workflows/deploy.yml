@@ -29,3 +29,5 @@ jobs:
       run: echo '${{ secrets.KUBE_CONFIG }}' > ~/.kube/config
     - name: Test kubeconfig
       run: kubectl config view
+    - name: Run rCDS
+      run: rcds deploy
