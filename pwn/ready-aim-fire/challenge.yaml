@@ -1,5 +1,6 @@
 name: ready_aim_fire
 author: aparker
+deployed: false
 description: |-
   Firing your weapon when the spice harvester's shields are down requires exceptional timing.
 
@@ -19,3 +20,7 @@ containers:
     ports:
       - 1447
 
+expose:
+  main:
+    - target: 1447
+      tcp: 31008

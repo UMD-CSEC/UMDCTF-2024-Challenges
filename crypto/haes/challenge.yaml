@@ -1,5 +1,6 @@
 name: haes 
 author: aparker
+deployed: false
 description: |-
   Much like the Baron himself, Harkonnen encryption systems are quite... large.
 
@@ -17,3 +18,7 @@ containers:
     ports:
       - 1447
 
+expose:
+  main:
+    - target: 1447 
+      tcp: 30455

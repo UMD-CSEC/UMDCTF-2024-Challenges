@@ -1,5 +1,6 @@
 name: the_voice
 author: aparker
+deployed: false
 description: |-
   If you want the flag, command me to give it to you.
 
@@ -18,4 +19,7 @@ containers:
     privileged: true
     ports:
       - 1447
-
+expose:
+  main:
+    - target: 1447
+      tcp: 31192
