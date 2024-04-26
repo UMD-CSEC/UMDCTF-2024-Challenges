@@ -5,6 +5,8 @@ description: |-
 
   `{{ nc }}`
 
+deployed: false
+
 flag:
   file: flag.txt
 provide:
