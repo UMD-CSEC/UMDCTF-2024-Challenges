@@ -1,4 +1,4 @@
-FROM python:slim as app
+FROM python:3.11.1-slim-bullseye AS app
 RUN pip install --no-cache pycryptodome
 
 FROM pwn.red/jail
