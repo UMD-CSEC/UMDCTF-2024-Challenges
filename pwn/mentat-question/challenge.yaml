@@ -31,10 +31,10 @@ containers:
 # remove this if your challenge has no online component
 # use either tcp/http
 # this uses container name from above
-# expose: 
-#   main:
-#     - target: YOUR_CONTAINER_PORT_HERE
-#       tcp: COMPETITOR_PORT_HERE
+expose: 
+  main:
+    - target: 32300
+      tcp: 32300
 
 # set these to true when your challenge is ready
 # if you want to test your challenge, set deployed: true only, but
