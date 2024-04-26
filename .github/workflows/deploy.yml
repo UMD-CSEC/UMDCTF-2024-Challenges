@@ -30,6 +30,8 @@ jobs:
       run: echo '${{ secrets.KUBE_CONFIG }}' > ~/.kube/config
     - name: Test kubeconfig
       run: kubectl config view
+    - name: Write certs for UMDProxy
+      run: echo '${{ secrets.TLS_CRT }}' > web/umdproxy/nginx/cert.crt && echo '${{ secrets.TLS_KEY }}' > web/umdproxy/nginx/cert.key
     - name: Run rCDS
       run: rcds deploy
       env:
