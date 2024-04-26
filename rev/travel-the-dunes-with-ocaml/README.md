@@ -16,7 +16,7 @@ Install OCaml, then run `ocamlopt main.ml -o ocaml_executable`
 
 ## Flag
 
-`UMDCTF{~~~tfv3c0@!@$&*(^tb53+_+3r32b4by)(&#)R%@_____s3R10Us1Y_whO_@ctu@11y_usEs_0c@m1???_____NNI^&ON&X%^^&Q*Ttf8978vwo8~~~}`
+`UMDCTF{rvgxbvhm89tc83oc3t84mo90m83dt4m_____s3R10Us1Y_whO_@ctu@11y_usEs_0c@m1???_____al7of37d3otdxlsdt8nysfln8y43fsg7xuvnsf}`
 
 ## Writeup (Outdated - will fix later)
 
