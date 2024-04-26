@@ -20,6 +20,7 @@ containers:
     ports:
       - 1447
 expose:
-  - target: 1447
-    tcp: 31852
+  main:
+    - target: 1447
+      tcp: 31721
 
