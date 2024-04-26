@@ -21,3 +21,7 @@ jobs:
       run: gcloud auth activate-service-account chall-registrar@umdctf-2024.iam.gserviceaccount.com --key-file=key.json
     - name: Configure docker registry
       run: gcloud auth configure-docker gcr.io --quiet
+    - name: Get kubeconfig
+      run: echo '${{ secrets.KUBE_CONFIG }}' > ~/.kube/config
+    - name: Test kubeconfig
+      run: kubectl config view
