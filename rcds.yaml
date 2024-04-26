@@ -2,7 +2,7 @@ docker:
   image:
     prefix: us-east4-docker.pkg.dev/umdctf-2024/challs
 
-flagFormat: UMDCTF{[a-zA-Z0-9_,.'"?!@$<>*:-+]+}
+flagFormat: UMDCTF{[a-zA-Z0-9_,.'"?!@$<>*:-\\+]+}
 
 defaults:
   containers:
