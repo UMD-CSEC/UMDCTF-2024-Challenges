@@ -5,6 +5,10 @@ description: >-
   `{{ nc }}`
 author: >-
   lily
+
+visible: false
+deployed: false
+
 flag: 
   UMDCTF{I_l0vE_p@dINg_0rAClE_@tTacKS}
 containers:
