@@ -1,1 +1,0 @@
-/home/triacontakai/ctf/umdctf2024/UMDCTF-2024-Challenges/pwn/ready-aim-fire/ready_aim_fire.cpp
