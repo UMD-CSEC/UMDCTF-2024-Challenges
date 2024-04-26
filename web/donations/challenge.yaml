@@ -11,8 +11,8 @@ containers:
     ports: [80]
 expose:
   app:
-    target: 80
-    http: donations-api
+    - target: 80
+      http: donations-api
   frontend:
-    target: 80
-    http: donations
+    - target: 80
+      http: donations
