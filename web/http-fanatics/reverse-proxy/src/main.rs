@@ -19,17 +19,17 @@ use tokio_rustls::TlsAcceptor;
 
 #[tokio::main]
 async fn main() {
-    let certificates = std::fs::read("localhost.direct.crt").expect("Failed to read localhost.direct.crt");
+    let certificates = std::fs::read("cert.crt").expect("Failed to read cert.crt");
     let certificates: Vec<_> = rustls_pemfile::certs(&mut certificates.as_slice())
         .map(|cert| {
-            let cert = cert.expect("Failed to parse localhost.direct.crt");
+            let cert = cert.expect("Failed to parse cert.crt");
             Certificate(cert.to_vec())
         })
         .collect();
-    let key = std::fs::read("localhost.direct.key").expect("Failed to read localhost.direct.key");
+    let key = std::fs::read("cert.key").expect("Failed to read cert.key");
     let key = rustls_pemfile::private_key(&mut key.as_slice())
-        .expect("Failed to parse localhost.direct.key")
-        .expect("localhost.direct.key contains no private keys");
+        .expect("Failed to parse cert.key")
+        .expect("cert.key contains no private keys");
     let key = PrivateKey(key.secret_der().to_vec());
 
     let h2_task = {
