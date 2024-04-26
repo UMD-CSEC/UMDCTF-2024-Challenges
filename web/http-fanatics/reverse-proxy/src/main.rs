@@ -16,6 +16,7 @@ use rustls::{Certificate, PrivateKey, ServerConfig};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::{TcpListener, TcpStream};
 use tokio_rustls::TlsAcceptor;
+use url::Url;
 
 #[tokio::main]
 async fn main() {
@@ -256,6 +257,16 @@ async fn read_h1_response(mut proxy_stream: TcpStream) -> Result<(Response<()>, 
         Bytes::new()
     };
     proxied_response_headers.remove(http::header::CONTENT_LENGTH);
+    if let Some(location) = proxied_response_headers.get_mut(http::header::LOCATION) {
+        if let Ok(location_str) = location.to_str() {
+            if let Ok(mut location_url) = Url::parse(location_str) {
+                location_url.set_scheme("https").map_err(|_| anyhow!("error setting scheme"))?;
+                location_url.set_host(Some("http-fanatics.umdctf.io"))?;
+                location_url.set_port(Some(443)).map_err(|_| anyhow!("error setting port"))?;
+                *location = HeaderValue::from_str(location_url.as_str())?;
+            }
+        }
+    }
     let proxied_response = proxied_response_builder.body(())?;
 
     Ok((proxied_response, proxied_body))
