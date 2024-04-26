@@ -27,3 +27,7 @@ backends:
       scoring:
         minPoints: 50
         maxPoints: 500
+      sortOrder:
+        - literally-arrakis-i
+        - literally-arrakis-ii
+        - literally-arrakis-iii
