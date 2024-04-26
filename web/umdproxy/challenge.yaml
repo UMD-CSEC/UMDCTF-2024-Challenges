@@ -16,3 +16,5 @@ expose:
   nginx:
     - target: 443
       tcp: 31111
+
+deployed: false
