@@ -1,4 +1,4 @@
 FROM nginx
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY localhost.direct.crt /etc/nginx/
-COPY localhost.direct.key /etc/nginx/
+COPY cert.crt /etc/nginx/
+COPY cert.key /etc/nginx/
