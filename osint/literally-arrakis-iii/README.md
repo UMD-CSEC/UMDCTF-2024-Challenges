@@ -1,6 +1,6 @@
 # literally arrakis III
 
-*snap* can you find your third and final fremen target? flag format is `UMDCTF{latitude, longitude}`, for example: `UMDCTF{38.9865489,-76.9451673}`
+*snap* can you find your third and final fremen target? flag format is `UMDCTF{latitude,longitude}`, for example: `UMDCTF{38.9865489,-76.9451673}`
 
 the coordinates are exact to what google gives you in the street view url.
 
