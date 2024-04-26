@@ -3,24 +3,45 @@
 #include <string.h>
 #include <time.h>
 
+#define NUM_BUYERS 8
+
 struct spice_buyer {
     unsigned int spice_amount;
-    char name[12];
+    char name[20];
 };
 
+unsigned int spice_amount(struct spice_buyer buyer) {
+    /* TODO: convert to kilograms */
+    return buyer.spice_amount;
+}
+
 void prompt(void) {
-    printf("Choose an option:\n");
-    printf("(1) View a buyer\n");
-    printf("(2) Add a buyer\n");
-    printf("(3) Update a buyer's spice allocation\n");
-    printf("(4) Remove a buyer\n");
-    printf("(5) Sell the spice\n");
+    char *prompt = 
+        "Choose an option:\n"
+        "(1) Add a buyer\n"
+        "(2) Update a buyer's spice allocation\n"
+        "(3) View a buyer\n"
+        "(4) Deploy a hunter-seeker\n"
+        "(5) Sell the spice\n";
+
+    /* Never pass up an opportunity to practice your assembly skills! */
+    asm volatile(
+        "movq $1,   %%rax\n "
+        "movq $1,   %%rdi\n "
+        "movq %[s], %%rsi\n "
+        "movq %[len], %%rdx\n "
+        "syscall\n "
+        :
+        : [s]   "r" (prompt),
+          [len] "r" (strlen(prompt))
+        : "rax", "rdi", "rsi", "rdx"
+    );
 }
 
 int main() {
-    struct spice_buyer buyers[8];
-    char buf[16];
     int i, num, len, spice;
+    struct spice_buyer buyers[NUM_BUYERS];
+    char buf[16];
 
     setbuf(stdin, NULL);
     setbuf(stdout, NULL);
@@ -53,16 +74,7 @@ int main() {
             fgets(buf, sizeof(buf), stdin);
             num = atoi(buf);
 
-            struct spice_buyer *buyer = &buyers[num];
-            printf("Buyer %d: %s, allocated %u tons of spice\n", num, buyer->name, buyer->spice_amount);
-
-            break;
-        case 2:
-            printf("Enter the buyer index: ");
-            fgets(buf, sizeof(buf), stdin);
-            num = atoi(buf);
-
-            if (num < 0 || num >= 8) {
+            if (num < 0 || num >= NUM_BUYERS) {
                 printf("Invalid index!\n");
                 continue;
             }
@@ -75,6 +87,17 @@ int main() {
             fgets(buyers[num].name, len, stdin);
             buyers[num].name[strcspn(buyers[num].name, "\n")] = '\0';
 
+            break;
+        case 2:
+            printf("Enter the buyer index: ");
+            fgets(buf, sizeof(buf), stdin);
+            num = atoi(buf);
+
+            if (num < 0 || num >= NUM_BUYERS || strcmp(buyers[num].name, "") == 0) {
+                printf("Invalid index!\n");
+                continue;
+            }
+
             printf("Enter the spice allocation (in tons) to this buyer: ");
             fgets(buf, sizeof(buf), stdin);
             buyers[num].spice_amount = atoi(buf);
@@ -85,46 +108,32 @@ int main() {
             fgets(buf, sizeof(buf), stdin);
             num = atoi(buf);
 
-            if (num < 0 || num >= 8) {
-                printf("Invalid index!\n");
-                continue;
-            }
-
-            printf("Enter the spice allocation (in tons) to this buyer: ");
-            fgets(buf, sizeof(buf), stdin);
-            buyers[num].spice_amount = atoi(buf);
+            printf("Buyer %d: %s, allocated %u tons of spice\n", num, buyers[num].name, spice_amount(buyers[num]));
 
             break;
         case 4:
-            printf("Enter the buyer index: ");
-            fgets(buf, sizeof(buf), stdin);
-            num = atoi(buf);
-
-            if (num < 0 || num >= 8) {
-                printf("Invalid index!\n");
-                continue;
-            }
-
-            strcpy(buyers[num].name, "");
-            buyers[num].spice_amount = 0;
+            printf("Your hunter-seeker explodes next to its target; before it explodes, here's what it saw: %p\n", buyers);
 
             break;
         default:
-            for (i = 0; i < 8; i++) {
-                spice -= buyers[i].spice_amount;
+            for (i = 0; i < NUM_BUYERS; i++) {
+                spice -= spice_amount(buyers[i]);
             }
 
             if (spice < 0) {
                 printf("You oversold your spice resources. The Spacing Guild is extremely angry, and has revoked your shipping privileges.\n");
-                exit(1);
+                goto done;
             } else if (spice == 0) {
                 printf("You sold all of the spice! The Baron wanted you to sell it slowly to inflate the price! He is extremely angry with you.\n");
-                exit(1);
+                goto done;
             } else {
                 printf("You sold the spice, and have %d tons remaining. You live to see another day.\n", spice);
-                exit(0);
+                goto done;
             }
         }
     }
+
+done:
+    return spice <= 0;
 }
 
