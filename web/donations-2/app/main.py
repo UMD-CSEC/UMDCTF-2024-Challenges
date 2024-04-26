@@ -115,6 +115,9 @@ async def donate(request: Request, content_type: Annotated[str | None, Header()]
 
     currency = int(params["currency"])
 
+    if currency < 0:
+        raise HTTPException(status_code=fastapi.status.HTTP_403_FORBIDDEN, detail="only Amazon can steal your money")
+
     if "to" not in params:
         raise HTTPException(status_code=fastapi.status.HTTP_400_BAD_REQUEST, detail="to is missing")
 
