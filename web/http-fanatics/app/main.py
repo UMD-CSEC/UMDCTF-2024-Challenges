@@ -60,7 +60,7 @@ def reset_users():
     global users
     while True:
         users = default_users.copy()
-        time.sleep(60)
+        time.sleep(5 * 60)
 
 
 reset_thread = threading.Thread(target=reset_users)
