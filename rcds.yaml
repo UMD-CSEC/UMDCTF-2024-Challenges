@@ -22,8 +22,8 @@ backends:
         ingress:
           traefik.ingress.kubernetes.io/router.tls: "true"
   - resolve: rctf
-    url: https://api.umdctf.io/
     options:
+      url: https://api.umdctf.io/
       scoring:
         minPoints: 50
         maxPoints: 500
