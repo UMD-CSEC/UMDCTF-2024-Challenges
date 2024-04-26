@@ -1,6 +1,6 @@
 from pwn import *
 
-p = gdb.debug("./a.out")
+p = gdb.debug("./mentat-question")
 
 p.sendlineafter(b"?", b"Division")
 p.sendlineafter(b"?", b"123")
