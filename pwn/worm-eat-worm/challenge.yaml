@@ -16,6 +16,7 @@ provide:
   - ./ld-linux-x86-64.so.2
   - ./libm.so.6
   - ./libgcc_s.so.1
+  - ./libstdc++.so.6
 
 
 containers:
