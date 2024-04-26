@@ -13,4 +13,4 @@ files:
 expose: 
   main:
   - target: 12345
-    tcp: 12345
+    tcp: 32345

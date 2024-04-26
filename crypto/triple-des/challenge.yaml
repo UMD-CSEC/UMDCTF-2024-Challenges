@@ -14,5 +14,5 @@ containers:
 expose:
   main:
     - target: 5000
-      tcp: 33333
+      tcp: 32333
       healthContent: "DES, three times"
