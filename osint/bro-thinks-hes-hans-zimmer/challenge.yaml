@@ -1,0 +1,9 @@
+name: bro thinks hes hans zimmer
+author: segal
+description: |-
+  you seek to find the finest musical artist to ever strike the universe. he is said to be living in the location provided in the image.
+
+  flag format is `UMDCTF{musician's name underscore separated}`, for example `UMDCTF{Frank_Sinatra}`
+flag: UMDCTF{Gom_Jabbar}
+provide:
+  - ./hans-zimmer.jpg
