@@ -261,7 +261,7 @@ async fn read_h1_response(mut proxy_stream: TcpStream) -> Result<(Response<()>, 
         if let Ok(location_str) = location.to_str() {
             if let Ok(mut location_url) = Url::parse(location_str) {
                 location_url.set_scheme("https").map_err(|_| anyhow!("error setting scheme"))?;
-                location_url.set_host(Some("http-fanatics.umdctf.io"))?;
+                location_url.set_host(Some("http-fanatics.challs.umdctf.io"))?;
                 location_url.set_port(Some(443)).map_err(|_| anyhow!("error setting port"))?;
                 *location = HeaderValue::from_str(location_url.as_str())?;
             }

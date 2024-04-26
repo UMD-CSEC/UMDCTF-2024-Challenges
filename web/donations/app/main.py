@@ -14,7 +14,7 @@ app = FastAPI()
 app.add_middleware(SessionMiddleware, secret_key=base64.b64encode(os.urandom(64)).decode())
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "https://donations.umdctf.io"],
+    allow_origins=["http://localhost:5173", "https://donations.challs.umdctf.io"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
