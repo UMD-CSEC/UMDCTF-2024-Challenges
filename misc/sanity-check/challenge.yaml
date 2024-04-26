@@ -1,0 +1,7 @@
+name: sanity check
+author: UMDCSEC
+description: |-
+  Welcome to UMDCTF 2024!
+  `UMDCTF{he_who_controls_the_spice_controls_the_universe}`
+
+flag: UMDCTF{he_who_controls_the_spice_controls_the_universe}
