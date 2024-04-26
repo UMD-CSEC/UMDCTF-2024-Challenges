@@ -42,4 +42,4 @@ expose:
 # be fast since your challenge is technically accessible by others
 # if they guess url/port
 visible: false
-deployed: true
+deployed: false
