@@ -41,7 +41,7 @@ async fn first_connection(request: Request<Incoming>) -> Result<Response<Empty<B
 
 async fn first_connection_inner(request: Request<Incoming>) -> Result<(), anyhow::Error> {
     let mut incoming_stream = TokioIo::new(hyper::upgrade::on(request).await?);
-    let mut outgoing_stream = TcpStream::connect("bob.localhost.direct:8443").await?;
+    let mut outgoing_stream = TcpStream::connect("challs.umdctf.io:31111").await?;
 
     let mut buf = [0; 8192];
     let bytes_read = incoming_stream.read(&mut buf).await?;
@@ -86,7 +86,7 @@ async fn second_connection_inner(request: Request<Incoming>) -> Result<(), anyho
     let bytes_read = incoming_stream.read(&mut buf).await?;
 
     for _ in 0..20 {
-        let mut outgoing_stream = TcpStream::connect("bob.localhost.direct:8443").await?;
+        let mut outgoing_stream = TcpStream::connect("challs.umdctf.io:31111").await?;
         outgoing_stream.write_all(&buf[0..bytes_read]).await?;
         tokio::time::sleep(Duration::from_secs(1)).await;
     }

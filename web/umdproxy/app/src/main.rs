@@ -337,8 +337,8 @@ async fn connect_via_stream<T>(stream: T, tls_connector: &TlsConnector, users: &
     let (mut proxy_sender, proxy_connection) = hyper::client::conn::http1::handshake(TokioIo::new(stream)).await?;
     tokio::spawn(proxy_connection.with_upgrades());
 
-    let connect_request = Request::connect("umdproxy.umdctf.io:443")
-        .header(hyper::header::HOST, "umdproxy.umdctf.io:443")
+    let connect_request = Request::connect("challs.umdctf.io:31111")
+        .header(hyper::header::HOST, "challs.umdctf.io:31111")
         .body(Empty::<Bytes>::new())
         .unwrap();
     let connect_response = proxy_sender.send_request(connect_request).await?;
@@ -347,7 +347,7 @@ async fn connect_via_stream<T>(stream: T, tls_connector: &TlsConnector, users: &
     }
 
     let upgraded = hyper::upgrade::on(connect_response).await?;
-    let tls_stream = tls_connector.connect(ServerName::try_from("umdproxy.umdctf.io").unwrap(), TokioIo::new(upgraded)).await?;
+    let tls_stream = tls_connector.connect(ServerName::try_from("challs.umdctf.io").unwrap(), TokioIo::new(upgraded)).await?;
 
     let (mut sender, connection) = hyper::client::conn::http1::handshake(TokioIo::new(tls_stream))
         .await?;
@@ -359,7 +359,7 @@ async fn connect_via_stream<T>(stream: T, tls_connector: &TlsConnector, users: &
     }))?;
 
     let add_credits_request = Request::post("/api/add-credits")
-        .header(hyper::header::HOST, "umdproxy.umdctf.io:443")
+        .header(hyper::header::HOST, "challs.umdctf.io:31111")
         .header(hyper::header::AUTHORIZATION, SERVER_SECRET)
         .header(hyper::header::CONTENT_TYPE, "application/json")
         .body(Full::<Bytes>::new(Bytes::from(body)))?;
