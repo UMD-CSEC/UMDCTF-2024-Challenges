@@ -6,8 +6,8 @@ description: >-
 author: >-
   lily
 
-visible: false
-deployed: false
+visible: true
+deployed: true
 
 flag: 
   UMDCTF{I_l0vE_p@dINg_0rAClE_@tTacKS}
