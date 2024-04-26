@@ -3,7 +3,7 @@ author: tahmid-23
 description: |-
   Show off your capitalistic altruism today.
 
-  {{ challenge.expose.frontend[0].http }}
+  <https://{{ challenge.expose.frontend[0].http }}>
 flag: UMDCTF{BE20$_1s_7h3_T0N6U3_OF_Th3_uN5e3N}
 
 deployed: true
