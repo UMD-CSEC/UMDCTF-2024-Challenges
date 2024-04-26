@@ -16,7 +16,7 @@ provide:
 containers:
   main:
     build: .
-    privileged: false
+    privileged: true
     ports:
       - 1447
 
