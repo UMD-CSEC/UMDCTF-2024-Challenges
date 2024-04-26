@@ -9,7 +9,7 @@ containers:
   main:
     build: .
     ports: [12345]
-files:
+provide:
   - iv.txt
   - flag.txt
 expose: 
