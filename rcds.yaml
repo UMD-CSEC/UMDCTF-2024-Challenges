@@ -32,5 +32,6 @@ backends:
         - literally-arrakis-ii
         - literally-arrakis-iii
         - donations
+        - donations-2
         - http-fanatics
         - umdproxy
