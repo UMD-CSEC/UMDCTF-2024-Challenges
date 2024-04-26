@@ -5,7 +5,7 @@ COPY --from=app / /srv
 COPY ./flag.txt /srv/app/flag.txt
 COPY ./libc.so.6 /srv/app/
 COPY ./ld-linux-x86-64.so.2 /srv/app/
-COPY ./chisel /srv/app/
+COPY ./chisel /srv/app/run
 
 RUN chmod +x /srv/app/run
 
