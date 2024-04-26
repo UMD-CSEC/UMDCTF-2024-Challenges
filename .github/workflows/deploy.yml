@@ -1,0 +1,21 @@
+name: Docker Image CI
+
+on: workflow_dispatch
+#  push:
+#    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Install rCDS
+      run: pip3 install rcds
+    - name: Populate gcloud service account key file
+      run: echo "${{ secrets.GCP_REGISTRAR_KEY_JSON }}" > key.json
+    - name: Authenticate gcloud
+      run: gcloud auth activate-service-account chall-registrar@umdctf-2024.iam.gserviceaccount.com --key-file=key.json
