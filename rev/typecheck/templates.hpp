@@ -105,7 +105,7 @@ template <int v, typename S>
 using T_t = typename T<v, S>::type;
 
 
-template <typename S, typename InstrTape, typename In>
+template <typename S, typename IT, typename In>
 struct vm;
 
 template <typename S, typename In>
@@ -138,7 +138,7 @@ struct vm<S, cons<V<4>, cons<V<PV>, R>>, In>  {
     using type = typename vm<T_t<PV, S>, R, In>::type;
 };
 
-template <typename S, typename InstrTape, typename In>
-using vm_t = typename vm<S, InstrTape, In>::type;
+template <typename S, typename IT, typename In>
+using vm_t = typename vm<S, IT, In>::type;
 
 

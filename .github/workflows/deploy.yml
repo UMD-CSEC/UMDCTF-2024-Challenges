@@ -1,0 +1,34 @@
+name: deploy challenges
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Install rCDS
+      run: pip install rcds-umdcsec
+    - name: Populate gcloud service account key file
+      run: echo '${{ secrets.GCP_REGISTRAR_KEY_JSON }}' > key.json
+    - name: Authenticate gcloud
+      run: gcloud auth activate-service-account chall-registrar@umdctf-2024.iam.gserviceaccount.com --key-file=key.json
+    - name: Configure docker registry
+      run: gcloud auth configure-docker us-east4-docker.pkg.dev --quiet
+    - name: Create .kube directory
+      run: mkdir ~/.kube
+    - name: Get kubeconfig
+      run: echo '${{ secrets.KUBE_CONFIG }}' > ~/.kube/config
+    - name: Test kubeconfig
+      run: kubectl config view
+    - name: Run rCDS
+      run: RCDS_K8S_DOCKERCONFIGJSON='${{ secrets.DOCKER_CONFIG_JSON }}' RCDS_RCTF_TOKEN="${{ secrets.RCTF_ADMIN_TOKEN }}" rcds deploy

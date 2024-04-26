@@ -1,0 +1,10 @@
+name: giedi_composite
+author: aparker
+description: |-
+
+flag: UMDCTF{NTRUly_a_n1c3_j0b}
+
+provide:
+  - ./chal.sage
+  - ./output.txt
+
