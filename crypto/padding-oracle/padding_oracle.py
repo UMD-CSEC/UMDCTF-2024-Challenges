@@ -4,8 +4,6 @@ import socket
 import string
 import time
 
-
-
 KEY = bytes.fromhex('262d0f6261daf5fda4036d8526b2c017')
 IV = bytes.fromhex('2652b7ae08b281594c488cf2e6daee43')
 MODE = AES.MODE_CBC
@@ -13,8 +11,6 @@ FLAG = 'umdctf{I_l0vE_p@dINg_0rAClE_@tTacKS}'
 
 HOST = 'localhost'
 PORT = 12345
-
-
 
 def pad(m):
 
@@ -74,47 +70,25 @@ def check_ct(ct):
 
 
 
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+if __name__ == "__main__":
+    print("welcome!!")
 
-    s.bind((HOST, PORT))
-    s.listen()
-    conn, addr = s.accept()
+    while True:
+        data = input("give me a ciphertext and I'll tell you if the corresponding plaintext has valid padding:\n")
+        
+        resp = None
 
-    with conn:
+        if len(data) != 2*2*16:
+            resp = 'wrong ciphertext size!'
+        elif not all(c in string.hexdigits for c in data):
+            resp = 'invalid ciphertext format!'
+        elif check_ct(data):
+            resp = 'valid padding :)'
+        elif not check_ct(data):
+            resp = 'invalid padding :('
+        else:
+            resp = 'wrong ciphertext format!'
 
-        conn.sendall(b'welcome!!\n')
-
-        while True:
-
-            conn.sendall(b'give me a ciphertext and I\'ll tell you if the corresponding plaintext has valid padding\n')
-            
-            data = conn.recv(4*16*8)
-            data = data.decode("utf-8")
-            data = data[:-1]
-            resp = None
-  
-            if len(data) != 2*2*16:
-
-                resp = 'wrong ciphertext size!\n'
-            
-            elif not all(c in string.hexdigits for c in data):
-
-                resp = 'invalid ciphertext format!\n'
-
-            elif check_ct(data):
-
-                resp = 'valid padding :)\n'
-
-            elif not check_ct(data):
-
-                resp = 'invalid padding :(\n'
-
-            else:
-
-                resp = 'wrong ciphertext format!\n'
-
-            conn.sendall(resp.encode('utf-8'))
-            conn.sendall(b'\n\n\n')
-            time.sleep(.5)
-            
-    
+        print(resp)
+        print("\n\n")
+        time.sleep(.5)
