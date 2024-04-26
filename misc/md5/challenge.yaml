@@ -1,6 +1,9 @@
 name: md5
 author: edwfeng
-description: this challenge might not be solvable
+description: |
+  this challenge might not be solvable
+
+  `{{ link }}`
 flag: UMDCTF{why_did_you_spend_your_time_doing_this}
 containers:
   main:
