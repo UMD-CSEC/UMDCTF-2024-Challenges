@@ -30,4 +30,4 @@ jobs:
     - name: Test kubeconfig
       run: kubectl config view
     - name: Run rCDS
-      run: rcds deploy
+      run: RCDS_RCTF_TOKEN="${{ secrets.RCTF_ADMIN_TOKEN }}" rcds deploy
