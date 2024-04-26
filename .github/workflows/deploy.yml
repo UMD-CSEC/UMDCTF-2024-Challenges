@@ -22,7 +22,7 @@ jobs:
     - name: Authenticate gcloud
       run: gcloud auth activate-service-account chall-registrar@umdctf-2024.iam.gserviceaccount.com --key-file=key.json
     - name: Configure docker registry
-      run: gcloud auth configure-docker gcr.io --quiet
+      run: gcloud auth configure-docker us-east4-docker.pkg.dev --quiet
     - name: Create .kube directory
       run: mkdir ~/.kube
     - name: Get kubeconfig
