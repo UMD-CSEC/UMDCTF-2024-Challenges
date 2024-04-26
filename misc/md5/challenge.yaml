@@ -9,4 +9,4 @@ containers:
 expose:
   main:
     - target: 5000
-      tcp: 30438
+      http: md5
