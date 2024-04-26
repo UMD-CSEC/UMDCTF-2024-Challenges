@@ -1,3 +1,5 @@
+#!/usr/local/bin/python3
+
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 import socket
@@ -7,7 +9,7 @@ import time
 KEY = bytes.fromhex('262d0f6261daf5fda4036d8526b2c017')
 IV = bytes.fromhex('2652b7ae08b281594c488cf2e6daee43')
 MODE = AES.MODE_CBC
-FLAG = 'umdctf{I_l0vE_p@dINg_0rAClE_@tTacKS}'
+FLAG = 'UMDCTF{I_l0vE_p@dINg_0rAClE_@tTacKS}'
 
 HOST = 'localhost'
 PORT = 12345
