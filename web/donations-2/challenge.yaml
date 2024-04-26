@@ -6,7 +6,7 @@ description: |-
   <https://{{ challenge.expose.frontend[0].http }}>
 flag: UMDCTF{TeS7_your_CHAL1En93S 6UyS}
 
-deployed: false
+deployed: true
 
 containers:
   app:
