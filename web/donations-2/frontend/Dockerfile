@@ -14,4 +14,6 @@ RUN apt-get install nginx -y
 
 COPY --from=build /usr/app/dist /var/www/html/
 
+COPY --from=build /usr/app/nginx.conf /etc/nginx/nginx.conf
+
 CMD ["nginx", "-g", "daemon off;"]
