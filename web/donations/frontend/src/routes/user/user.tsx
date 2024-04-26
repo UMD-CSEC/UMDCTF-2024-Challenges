@@ -37,7 +37,7 @@ export default function User() {
     const newData = await response.json();
     setData(newData);
 
-    if (localStorage.getItem("username") === newData.username && newData.currency >= 1_001) {
+    if (localStorage.getItem("username") === newData.username && newData.currency >= 5_000) {
       requestFlag();
     }
   }, [requestFlag]);

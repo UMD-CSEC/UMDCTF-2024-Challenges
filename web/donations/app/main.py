@@ -148,7 +148,7 @@ async def flag(request: Request):
             raise HTTPException(status_code=fastapi.status.HTTP_401_UNAUTHORIZED, detail="unauthorized")
 
         user = users[request.session["username"]]
-        if user["currency"] < 1001:
+        if user["currency"] < 5_000:
             raise HTTPException(status_code=fastapi.status.HTTP_403_FORBIDDEN,
                                 detail="only the wealthy may view the treasure...")
 
