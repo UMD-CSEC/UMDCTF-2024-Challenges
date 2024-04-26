@@ -16,7 +16,7 @@ jobs:
       with:
         fetch-depth: 0
     - name: Install rCDS
-      run: pip3 install rcds
+      run: pip install rcds-umdcsec
     - name: Populate gcloud service account key file
       run: echo '${{ secrets.GCP_REGISTRAR_KEY_JSON }}' > key.json
     - name: Authenticate gcloud
