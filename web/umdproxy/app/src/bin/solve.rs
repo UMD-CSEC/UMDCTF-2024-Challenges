@@ -7,7 +7,7 @@ use hyper::{Request, Response, StatusCode};
 use hyper::service::service_fn;
 use hyper_util::rt::TokioIo;
 use tokio::net::{TcpListener, TcpStream};
-use tokio::io::{AsyncReadExt, AsyncWriteExt};
+use tokio::io::{AsyncRead, AsyncReadExt, AsyncWrite, AsyncWriteExt};
 
 #[tokio::main]
 async fn main() {
@@ -31,6 +31,24 @@ async fn main() {
     tokio::time::sleep(Duration::from_secs(1000)).await;
 }
 
+async fn transfer<From, To>(buf: &mut [u8], from: &mut From, to: &mut To) -> Result<(), anyhow::Error>
+    where From: AsyncRead + Unpin,
+          To: AsyncWrite + Unpin {
+    loop {
+        if let Ok(Ok(_)) = tokio::time::timeout(Duration::from_secs(1), async {
+            let bytes_read = from.read(buf).await?;
+            to.write_all(&buf[0..bytes_read]).await?;
+            return Ok::<(), anyhow::Error>(());
+        }).await {
+            continue;
+        }
+
+        break;
+    }
+
+    Ok(())
+}
+
 async fn first_connection(request: Request<Incoming>) -> Result<Response<Empty<Bytes>>, anyhow::Error> {
     tokio::spawn(async move {
         first_connection_inner(request).await;
@@ -44,26 +62,13 @@ async fn first_connection_inner(request: Request<Incoming>) -> Result<(), anyhow
     let mut outgoing_stream = TcpStream::connect("challs.umdctf.io:31111").await?;
 
     let mut buf = [0; 8192];
-    let bytes_read = incoming_stream.read(&mut buf).await?;
-    outgoing_stream.write_all(&buf[0..bytes_read]).await?;
-
-    let bytes_read = outgoing_stream.read(&mut buf).await?;
-    incoming_stream.write_all(&buf[0..bytes_read]).await?;
+    transfer(&mut buf, &mut incoming_stream, &mut outgoing_stream).await?;
+    transfer(&mut buf, &mut outgoing_stream, &mut incoming_stream).await?;
 
     incoming_stream.read_exact(&mut buf[0..80]).await?;
     outgoing_stream.write_all(&buf[0..80]).await?;
 
-    loop {
-        if let Ok(Ok(_)) = tokio::time::timeout(Duration::from_secs(1), async {
-            let bytes_read = outgoing_stream.read(&mut buf).await?;
-            incoming_stream.write_all(&buf[0..bytes_read]).await?;
-            return Ok::<(), anyhow::Error>(());
-        }).await {
-            continue;
-        }
-
-        break;
-    }
+    transfer(&mut buf, &mut outgoing_stream, &mut incoming_stream).await?;
 
     incoming_stream.shutdown().await?;
     outgoing_stream.shutdown().await?;
@@ -95,6 +100,3 @@ async fn second_connection_inner(request: Request<Incoming>) -> Result<(), anyho
 
     Ok(())
 }
-
-
-
