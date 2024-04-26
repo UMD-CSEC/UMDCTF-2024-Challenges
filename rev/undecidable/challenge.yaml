@@ -1,0 +1,9 @@
+name: undecidable
+author: clam
+
+description: Have you ever wondered what goes on inside a mentat's mind? This one seems a little...distracted.
+
+flag: UMDCTF{can_a_mentat_prove_its_own_consistency}
+
+provide:
+  - ./undecidable
