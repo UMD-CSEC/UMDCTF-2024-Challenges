@@ -3,7 +3,7 @@ author: edwfeng
 description: |
   this challenge might not be solvable
 
-  `{{ link }}`
+  {{ link }}
 flag: UMDCTF{why_did_you_spend_your_time_doing_this}
 containers:
   main:
