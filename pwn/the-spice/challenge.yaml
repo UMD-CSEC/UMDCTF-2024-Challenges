@@ -19,4 +19,7 @@ containers:
     privileged: true
     ports:
       - 1447
+expose:
+  - target: 1447
+    tcp: 31852
 
