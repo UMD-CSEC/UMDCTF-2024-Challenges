@@ -11,4 +11,4 @@ Use docker with `dockerfile` to run the padding oracle. Use netcat to interact w
 - `flag.txt`
 
 ## Flag
-`umdctf{I_l0vE_p@dINg_0rAClE_@tTacKS}`
+`UMDCTF{I_l0vE_p@dINg_0rAClE_@tTacKS}`
