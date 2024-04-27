@@ -38,7 +38,7 @@ model.eval()
 inp = input(f"Enter a base64 encoded 40x40 image patch.\n")
 try:
     patch = np.frombuffer(base64.standard_b64decode(inp), dtype=np.uint8)
-    patch = patch.reshape((3, 40, 40)).transpose(2, 0, 1) / 255
+    patch = patch.reshape((40, 40, 3)).transpose(2, 0, 1) / 255
 except:
     print("Invalid patch.")
     sys.exit(0)
