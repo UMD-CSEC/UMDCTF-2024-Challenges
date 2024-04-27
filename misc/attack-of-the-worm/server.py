@@ -10,7 +10,6 @@ from torchvision.models import resnet18
 model = resnet18()
 model.fc = nn.Linear(model.fc.in_features, 1)
 model.load_state_dict(torch.load('model.pt'))
-model.eval()
 
 original = np.array(Image.open("worm.png"))
 modified = original.copy()
