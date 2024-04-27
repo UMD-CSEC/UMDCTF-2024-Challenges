@@ -14,12 +14,12 @@ flag:
 containers:
   main:
     build: .
-    ports: [12345]
+    ports: [1447]
     privileged: true
 provide:
   - iv.txt
   - flag.txt
 expose: 
   main:
-  - target: 12345
+  - target: 1447
     tcp: 32345
