@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <cstring>
 #include <vector>
+#include <memory>
 
 
 
@@ -65,7 +66,8 @@ int main() {
     worms.reserve(20);
 
 
-    std::cout << "Free libc leak: " << stdin << std::endl;
+    std::cout << "Free leak: " << stdin << std::endl; 
+    std::cout << "Free leak: " << *(void**)&std::cout << std::endl;
     while (true) {
         prompt();
         std::cin >> choice;

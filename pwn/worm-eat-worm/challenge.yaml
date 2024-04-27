@@ -1,6 +1,6 @@
 name: worm-eat-worm 
 author: aparker
-deployed: false
+deployed: true
 visible: false
 description: |-
   Do sandworms eat each other? I don't know, but I made a challenge about that anyways.

