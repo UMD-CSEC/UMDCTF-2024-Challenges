@@ -23,6 +23,7 @@ try:
         modified[y, x] = [r, g, b]
 except:
     print("Too many pixel changes.")
+    sys.exit(0)
 
 x = torch.tensor(modified.transpose(2, 0, 1) / 255.0, dtype=torch.float32).unsqueeze(0)
 with torch.no_grad():
