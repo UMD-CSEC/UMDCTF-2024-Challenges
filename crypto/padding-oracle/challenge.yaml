@@ -15,6 +15,7 @@ containers:
   main:
     build: .
     ports: [12345]
+    privileged: true
 provide:
   - iv.txt
   - flag.txt
