@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python
 from os import urandom
 from Crypto.Cipher import DES
 from Crypto.Util.Padding import pad, unpad
