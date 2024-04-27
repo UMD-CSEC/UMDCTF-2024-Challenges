@@ -93,4 +93,3 @@ if __name__ == "__main__":
 
         print(resp)
         print("\n\n")
-        time.sleep(.5)
