@@ -2,8 +2,9 @@ name: ornithopter
 author: triacontakai
 deployed: true
 description: |-
-  Arrakis is so beautiful when viewed from above.
-  Giedi Prime - not so much.
+  To learn how to walk, you must first learn to fly.
+
+  Wait...
 
   `{{ nc }}` 
 
