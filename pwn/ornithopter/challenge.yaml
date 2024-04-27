@@ -1,0 +1,29 @@
+name: ornithopter
+author: triacontakai
+deployed: true
+description: |-
+  The beauracracy in the Atreides ornithopter launch area is getting out of hand.
+  Get me to liftoff!
+
+  `{{ nc }}` 
+
+visible: false
+
+flag:
+  file: flag.txt
+
+provide:
+  - ./ornithopter
+  - ./libc.so.6
+  - ./ld-linux-x86-64.so.2
+
+containers:
+  main:
+    build: .
+    privileged: true
+    ports:
+      - 1447
+expose:
+  main:
+    - target: 1447
+      tcp: 31727
