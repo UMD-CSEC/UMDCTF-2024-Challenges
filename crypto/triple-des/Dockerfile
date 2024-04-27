@@ -9,4 +9,4 @@ COPY flag.txt /srv/app
 
 RUN chmod +x /srv/app/run
 
-ENV JAIL_MEM=20M JAIL_CPU=500
+ENV JAIL_MEM=20M JAIL_CPU=500 JAIL_TIME=60
