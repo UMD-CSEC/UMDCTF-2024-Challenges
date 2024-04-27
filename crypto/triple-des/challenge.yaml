@@ -6,7 +6,7 @@ description: |-
   `{{ nc }}`
 
 deployed: true
-visible: false
+visible: true
 
 flag:
   file: flag.txt

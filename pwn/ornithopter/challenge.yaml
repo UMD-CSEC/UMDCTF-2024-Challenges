@@ -8,7 +8,7 @@ description: |-
 
   `{{ nc }}` 
 
-visible: false
+visible: true
 deployed: true
 
 flag:

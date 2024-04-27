@@ -41,5 +41,5 @@ expose:
 # if you want to test your challenge, set deployed: true only, but
 # be fast since your challenge is technically accessible by others
 # if they guess url/port
-visible: false
+visible: true
 deployed: true
