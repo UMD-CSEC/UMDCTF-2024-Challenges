@@ -2,7 +2,7 @@ FROM ubuntu@sha256:562456a05a0dbd62a671c1854868862a4687bf979a96d48ae8e766642cd91
 FROM pwn.red/jail
 
 COPY --from=app / /srv
-COPY orni /srv/app/run
+COPY thopter /srv/app/run
 COPY ld-linux-x86-64.so.2 /srv/app
 COPY libc.so.6 /srv/app
 COPY flag.txt /srv/app/flag.txt
