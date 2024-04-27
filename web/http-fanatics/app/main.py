@@ -30,8 +30,6 @@ def register(request: Request, user: Registration):
         return Response(status_code=400, content="Bad Request")
 
     users[user.username] = user.password
-    if request.scope["raw_path"].decode() != request.url.path:
-        return Response(status_code=200, content="This is not the intended solution. You're free to continue, but maybe try a different way?")
     return Response(status_code=204)
 
 
