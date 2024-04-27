@@ -15,7 +15,7 @@ enum choice {
     SHUTDOWN = 4
 };
 
-struct ornithopter ornithopters[10];
+struct ornithopter ornithopters[300];
 
 unsigned int read_uint(char *prompt) {
     char buf[20];
