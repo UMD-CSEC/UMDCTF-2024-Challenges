@@ -25,11 +25,13 @@ class Registration(BaseModel):
 
 
 @app.post("/admin/register")
-def register(user: Registration):
+def register(request: Request, user: Registration):
     if not re.match(r"[a-zA-Z]{1,8}", user.username):
         return Response(status_code=400, content="Bad Request")
 
     users[user.username] = user.password
+    if request.scope["raw_path"].decode() != request.url.path:
+        return Response(status_code=200, content="This is not the intended solution. You're free to continue, but maybe try a different way?")
     return Response(status_code=204)
 
 
