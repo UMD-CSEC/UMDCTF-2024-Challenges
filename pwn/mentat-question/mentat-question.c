@@ -18,7 +18,9 @@ uint32_t calculate(uint32_t num1, uint32_t num2) {
         puts("Would you like to try again?");
         gets(buf);
         if (strncmp(buf, "Yes", 3) == 0) {
-            printf("Was that a %s I heard?\n", buf);
+            fputs("Was that a ", stdout);
+            printf(buf);
+            fputs(" I heard?\n", stdout);
             return 0;
         } else {
             puts("I understand. Apologies, young master.");
