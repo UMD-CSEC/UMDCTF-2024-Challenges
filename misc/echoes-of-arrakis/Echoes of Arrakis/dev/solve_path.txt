@@ -1,0 +1,5 @@
+1. Given the filmbook video file and a subtitle srt file
+2. They watch the video and see hints of FREMEN being the key and encoded text (see message_scrambled.txt) in the subtitles. They can see encoded text is Vingere cipher encoded with key FREMEN
+	Encoded: YYI MRFBVV XMRX NMFLVS KLQ WGTIC AJ GMV WMRQBFVYW: uykte://cbzky.ni/3pX-H-NspUZ
+	Unencoded: THE ANSWER LIES WITHIN THE STORY OF THE SANDWORMS: https://youtu.be/3cS-Q-JglHU
+3. They decode it to get "riddle" with a link to a private YouTube video (https://youtu.be/3cS-Q-JglHU) with the morse code of the flag
