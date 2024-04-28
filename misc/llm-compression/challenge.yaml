@@ -5,3 +5,4 @@ flag: UMDCTF{holy_compression_with_ml!!!}
 provide:
   - ./flag.txt
   - ./params.npz
+visible: false
