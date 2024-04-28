@@ -1,5 +1,5 @@
 # UMDCTF-2024-Challenges
-Private repository for the development and testing of UMDCTF 2024 challenges. Exact date for UMDCTF 2024 is April 26-28th.
+~~Private~~ Public repository for the development and testing of UMDCTF 2024 challenges. Exact date for UMDCTF 2024 is April 26-28th.
 
 ## About
 Each challenge is the respective work of the listed author.
