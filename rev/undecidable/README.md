@@ -4,7 +4,7 @@ Have you ever wondered what goes on inside a mentat's mind? This one seems a lit
 **Hint**: the flag is 46 characters long.
 
 ## Build Instructions
-N/A
+Compile with `-O2 -s`
 
 ## Files for CTFd
 - `undecidable`
