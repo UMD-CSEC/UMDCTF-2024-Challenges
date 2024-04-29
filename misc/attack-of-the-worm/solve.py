@@ -26,7 +26,7 @@ d = torch.zeros_like(worm, requires_grad=True)
 # define number of optimization steps
 num_steps = 25000
 
-# define loss function, optimizer, and learning rate scheduler
+# define loss function and optimizer
 criterion = nn.BCEWithLogitsLoss()
 optim = torch.optim.Adam([d], lr=1.0)
 
@@ -68,7 +68,7 @@ for i in range(num_steps):
     d_grad_inf_norm = d.grad.norm(p=float("inf")).clamp_(min=1e-12)
     d.grad.div_(d_grad_inf_norm)
 
-    # update perturbation and learning rate
+    # update perturbation
     optim.step()
 
     # clamp perturbation such that the resulting image is between 0 and 1
